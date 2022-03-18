@@ -1,8 +1,5 @@
-from pygame.image import load as load_image
-from pygame.transform import rotate
+import pygame
 from pygame import draw
-
-import weapons
 from config import FPS
 from pygame.key import get_pressed as get_keys_pressed
 from pygame.constants import K_UP, K_DOWN, K_RIGHT, K_LEFT, K_w, K_a, K_s, K_d
@@ -31,23 +28,20 @@ class Position:  # to handle x and y stuff more easily
 class Player:
     def __init__(self, layout: ControllerLayout):
         self.input_keys = layout
-        self.weapon = weapons.Sword(10, load_image("resources/images/swords/broadsword.png"))
+        self.color = BLUE if layout.name == "WASD" else RED
 
-        self.image = load_image("resources/images/broyalguard.bmp") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
+        self.image = pygame.image.load("resources/images/broyalguard.bmp")
+        if self.color == RED:
+            self.image = pygame.image.load("resources/images/rroyalguard.bmp")
         self.rect = self.image.get_rect()
-
         self.position = Position(50, 50)
         self.velocity = 500
         self.rotation_velocity = 500
         self.angle = 90 # Measured in degrees
 
     def update(self, screen):
-        rotated_image = rotate(self.image, self.angle-90)
-        self.draw_weapon(screen)
-        screen.blit(rotated_image, self.position.xy())
-
-    def draw_weapon(self, screen):
-        self.weapon.draw(screen, self.position, self.angle)
+        rotated_image = pygame.transform.rotate(self.image, self.angle-90)
+        screen.blit(rotated_image, (self.position.x, self.position.y))
 
     def handle_movement(self):
         keys = get_keys_pressed()
