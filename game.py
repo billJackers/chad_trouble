@@ -97,7 +97,6 @@ class ChadTrouble:
     def check_arrow_wall_collisions(self):
         collisions = pygame.sprite.groupcollide(self.walls, self.arrows, False, False)
 
-        print(len(collisions))
         if collisions:
             for arrows in collisions.values():
                 for arrow in arrows:

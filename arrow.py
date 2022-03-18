@@ -2,6 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 
 import config
+import player
 
 import math
 
@@ -15,7 +16,7 @@ class Arrow(Sprite):
         self.active = True
 
         self.image = pygame.image.load("resources/images/blue_arrow.bmp")
-        if sprite.color == (255, 0, 0):
+        if sprite.input_keys.name == "ARROW":
             self.image = pygame.image.load("resources/images/red_arrow.bmp")
 
         self.rect = self.image.get_rect()
