@@ -1,5 +1,8 @@
-import pygame
+from pygame.image import load as load_image
+from pygame.transform import rotate
 from pygame import draw
+
+import weapons
 from config import FPS
 from pygame.key import get_pressed as get_keys_pressed
 from pygame.constants import K_UP, K_DOWN, K_RIGHT, K_LEFT, K_w, K_a, K_s, K_d
@@ -28,6 +31,7 @@ class Position:  # to handle x and y stuff more easily
 class Player:
     def __init__(self, layout: ControllerLayout):
         self.input_keys = layout
+        self.weapon = weapons.Sword(10, load_image("resources/images/swords/broadsword.png"))
 
         self.image = load_image("resources/images/broyalguard.bmp") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
         self.rect = self.image.get_rect()
