@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 class ChadTrouble():
 
@@ -26,11 +27,10 @@ class ChadTrouble():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-                pygame.quit()
+                sys.exit()
 
     def update_screen(self):
         self.screen.fill((255, 255, 255))
-
         pygame.display.flip()
 
 if __name__ == "__main__":
