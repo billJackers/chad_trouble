@@ -12,7 +12,7 @@ import math
 
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-# s
+
 
 class ControllerLayout(Enum):  # for different keyboard movements
     WASD = [K_w, K_a, K_s, K_d]
@@ -23,9 +23,11 @@ class Position:  # to handle x and y stuff more easily
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-    def xy(self):
+    def _set_xy(self, xy):
+        self.x, self.y = xy
+    def _get_xy(self):
         return [self.x, self.y]
+    xy = property(_get_xy, _set_xy)
 
 
 class Player:
@@ -33,18 +35,18 @@ class Player:
         self.input_keys = layout
         self.weapon = weapons.Sword(10, load_image("resources/images/swords/broadsword.png"))
 
-        self.image = load_image("resources/images/broyalguard.bmp") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
+        self.image = load_image("resources/images/player/topdowngigachad.png") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
         self.rect = self.image.get_rect()
 
         self.position = Position(50, 50)
         self.velocity = 500
         self.rotation_velocity = 500
-        self.angle = 90 # Measured in degrees
+        self.angle = 90  # Measured in degrees
 
     def update(self, screen):
         rotated_image = rotate(self.image, self.angle-90)
         self.draw_weapon(screen)
-        screen.blit(rotated_image, self.position.xy())
+        screen.blit(rotated_image, self.position.xy)
 
     def draw_weapon(self, screen):
         self.weapon.draw(screen, self.position, self.angle)
