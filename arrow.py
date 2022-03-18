@@ -10,7 +10,7 @@ class Arrow(Sprite):
 
     def __init__(self, sprite):
         super().__init__()
-        self.velocity = 700
+        self.velocity = 1000
         self.angle = sprite.angle
 
         self.active = True

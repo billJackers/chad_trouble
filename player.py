@@ -43,7 +43,7 @@ class Player(Sprite):
 
         self.position = Position(50, 50)
         self.velocity = 500
-        self.rotation_velocity = 500
+        self.rotation_velocity = 400
         self.angle = 90  # Measured in degrees
 
         self.moving_forward = False

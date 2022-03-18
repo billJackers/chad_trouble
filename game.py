@@ -5,7 +5,7 @@ from player import Player, ControllerLayout
 from wall import Wall
 from arrow import Arrow
 
-from time import sleep
+import random
 
 class ChadTrouble:
     def __init__(self):
@@ -28,7 +28,9 @@ class ChadTrouble:
         self.players = [player_one, player_two]
 
         self.walls = pygame.sprite.Group()
-        self.generate_walls()
+        self.generate_side_walls()
+
+        self.generate_maze(0, int(config.WIDTH/config.WALL_HEIGHT), 0, int(config.HEIGHT/config.WALL_HEIGHT))
 
         self.arrows = pygame.sprite.Group()
 
@@ -72,23 +74,56 @@ class ChadTrouble:
 
         pygame.display.flip()
 
-    def generate_walls(self):
-        for x in range(1 + int(config.WIDTH / config.WALL_HEIGHT)):
-            for y in range(1 + int(config.HEIGHT / config.WALL_HEIGHT)):
-                vertical_wall = Wall(self)
-                vertical_wall.rect.x = x * config.WALL_HEIGHT
-                vertical_wall.rect.y = y * config.WALL_HEIGHT
-                vertical_wall.rect.width = config.WALL_WIDTH
-                vertical_wall.rect.height = config.WALL_HEIGHT
-                
-                horizontal_wall = Wall(self)
-                horizontal_wall.rect.x = x * config.WALL_HEIGHT
-                horizontal_wall.rect.y = y * config.WALL_HEIGHT
-                horizontal_wall.rect.width = config.WALL_HEIGHT
-                horizontal_wall.rect.height = config.WALL_WIDTH
+    def generate_side_walls(self):
+        # Top and bottom
+        for x in range(int(config.WIDTH/config.WALL_HEIGHT)):
+            top_wall = Wall(self)
+            top_wall.rect = pygame.Rect(x * config.WALL_HEIGHT, 0, config.WALL_HEIGHT, config.WALL_WIDTH)
 
-                self.walls.add(vertical_wall)
-                self.walls.add(horizontal_wall)
+            bottom_wall = Wall(self)
+            bottom_wall.rect = pygame.Rect(x * config.WALL_HEIGHT, config.HEIGHT - config.WALL_WIDTH, config.WALL_HEIGHT, config.WALL_WIDTH)
+
+            self.walls.add(top_wall)
+            self.walls.add(bottom_wall)
+
+        # Left and right
+        for y in range(int(config.HEIGHT/config.WALL_HEIGHT)):
+            left_wall = Wall(self)
+            left_wall.rect = pygame.Rect(0, y * config.WALL_HEIGHT, config.WALL_WIDTH, config.WALL_HEIGHT)
+
+            right_wall = Wall(self)
+            right_wall.rect = pygame.Rect(config.WIDTH - config.WALL_WIDTH, y * config.WALL_HEIGHT, config.WALL_WIDTH, config.WALL_HEIGHT)
+
+            self.walls.add(left_wall)
+            self.walls.add(right_wall)
+
+    def generate_maze(self, start_x, end_x, start_y, end_y):
+        if end_x - start_x <= 1 or end_y - start_y <= 2:
+            return
+        # Horizontal
+        hole = int(random.uniform(start_x, end_x-1))
+        y_level = int(random.uniform(start_y, end_y-1))
+
+        for x in range(start_x, end_x):
+            if x != hole:
+                new_wall = Wall(self)
+                new_wall.rect = pygame.Rect(x * config.WALL_HEIGHT, y_level * config.WALL_HEIGHT, config.WALL_HEIGHT, config.WALL_WIDTH)
+                self.walls.add(new_wall)
+
+        # Vertical
+        hole = int(random.uniform(start_y, end_y-1))
+        x_level = int(random.uniform(start_x, end_x-1))
+
+        for y in range(start_y, end_y):
+            if y != hole:
+                new_wall = Wall(self)
+                new_wall.rect = pygame.Rect(x_level * config.WALL_HEIGHT, y * config.WALL_HEIGHT, config.WALL_WIDTH, config.WALL_HEIGHT)
+                self.walls.add(new_wall)
+
+        self.generate_maze(start_x, x_level, start_y, y_level)
+        self.generate_maze(x_level, end_x, start_y, y_level)
+        self.generate_maze(start_x, x_level, y_level, end_y)
+        self.generate_maze(x_level, end_x, y_level, end_y)
 
     def fire_arrow(self, sprite):
         new_arrow = Arrow(sprite)
