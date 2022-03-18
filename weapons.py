@@ -14,5 +14,3 @@ class Sword:
         dy = 30*math.sin(to_radian)
 
         screen.blit(rotated_image, (position.x + dx, position.y - dy))
-
-

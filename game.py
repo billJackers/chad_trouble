@@ -3,6 +3,7 @@ import sys
 import config
 from player import Player, ControllerLayout
 from wall import Wall
+from arrow import Arrow
 
 from time import sleep
 
@@ -19,10 +20,17 @@ class ChadTrouble:
 
         player_one = Player(ControllerLayout.WASD)
         player_two = Player(ControllerLayout.ARROW)
+
+        self.player_group = pygame.sprite.Group()
+        self.player_group.add(player_one)
+        self.player_group.add(player_two)
+
         self.players = [player_one, player_two]
 
         self.walls = pygame.sprite.Group()
         self.generate_walls()
+
+        self.arrows = pygame.sprite.Group()
 
     def run(self):
         self.running = True
@@ -41,6 +49,14 @@ class ChadTrouble:
                 self.running = False
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.fire_arrow(self.players[0])
+                if event.key == pygame.K_p:
+                    self.fire_arrow(self.players[1])
+
+        self.check_arrow_wall_collisions()
+
     def update_screen(self):
         self.screen.fill((255, 255, 255))
 
@@ -48,6 +64,11 @@ class ChadTrouble:
 
         for wall in self.walls.sprites():
             wall.draw()
+
+        self.arrows.update(self.screen)
+
+        for arrow in self.arrows.sprites():
+            arrow.draw(self.screen)
 
         pygame.display.flip()
 
@@ -69,6 +90,27 @@ class ChadTrouble:
                 self.walls.add(vertical_wall)
                 self.walls.add(horizontal_wall)
 
+    def fire_arrow(self, sprite):
+        new_arrow = Arrow(sprite)
+        self.arrows.add(new_arrow)
+
+    def check_arrow_wall_collisions(self):
+        collisions = pygame.sprite.groupcollide(self.walls, self.arrows, False, False)
+
+        print(len(collisions))
+        if collisions:
+            for arrows in collisions.values():
+                for arrow in arrows:
+                    arrow.set_inactive()
+
+    def check_player_wall_collisions(self):
+        collisions = pygame.sprite.groupcollide(self.walls, self.player_group, False, False)
+
+        if collisions:
+            for players in collisions.values():
+                for player in players:
+                    # TODO
+                    continue
 
 if __name__ == "__main__":
     ct = ChadTrouble()

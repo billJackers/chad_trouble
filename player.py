@@ -1,6 +1,7 @@
 import pygame
 from pygame.image import load as load_image
 from pygame.transform import rotate
+from pygame.sprite import Sprite
 from pygame import draw
 from config import FPS
 from pygame.key import get_pressed as get_keys_pressed
@@ -29,8 +30,10 @@ class Position:  # to handle x and y stuff more easily
         return [self.x, self.y]
 
 
-class Player:
+class Player(Sprite):
     def __init__(self, layout: ControllerLayout):
+        super().__init__()
+
         self.input_keys = layout
         self.weapon = weapons.Sword(10, load_image("resources/images/swords/broadsword.bmp"))
 
@@ -45,6 +48,9 @@ class Player:
         self.rotation_velocity = 500
         self.angle = 90 # Measured in degrees
 
+        self.moving_forward = False
+        self.moving_backward = False
+
     def update(self, screen):
         rotated_image = pygame.transform.rotate(self.image, self.angle-90)
         self.weapon.draw(screen, self.position, self.angle)
@@ -56,6 +62,7 @@ class Player:
         radians = math.radians(self.angle)
 
         if keys[self.input_keys.value[0]]:  # Handles UP / W
+            self.moving_forward = True
             self.position.x += self.velocity * math.cos(radians) / FPS
             self.position.y -= self.velocity * math.sin(radians) / FPS
             
@@ -63,6 +70,7 @@ class Player:
             self.angle += self.rotation_velocity / FPS
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
+            self.moving_backward = True
             self.position.x -= self.velocity * math.cos(radians) / FPS
             self.position.y += self.velocity * math.sin(radians) / FPS
 
