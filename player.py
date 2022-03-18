@@ -33,6 +33,7 @@ class Player:
         self.image = pygame.image.load("resources/images/broyalguard.bmp")
         if self.color == RED:
             self.image = pygame.image.load("resources/images/rroyalguard.bmp")
+        self.rect = self.image.get_rect()
         self.position = Position(50, 50)
         self.velocity = 500
         self.rotation_velocity = 500
@@ -60,3 +61,8 @@ class Player:
 
         if keys[self.input_keys.value[3]]:  # Handles RIGHT / d
             self.angle -= self.rotation_velocity / FPS
+
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
+        print(self.rect.x)
