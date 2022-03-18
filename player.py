@@ -64,5 +64,3 @@ class Player:
 
         self.rect.x = self.position.x
         self.rect.y = self.position.y
-
-        print(self.rect.x)
