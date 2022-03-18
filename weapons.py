@@ -7,10 +7,10 @@ class Sword:
         self.image = sprite
 
     def draw(self, screen, position, angle):
-        rotated_image = rotate(self.image, angle - 90)
+        rotated_image = rotate(self.image, angle-45)
 
         to_radian = math.radians(angle)
-        dx = 30*math.cos(to_radian)
-        dy = 30*math.sin(to_radian)
+        dx = 10*math.cos(to_radian)
+        dy = 10*math.sin(to_radian)
 
         screen.blit(rotated_image, (position.x + dx, position.y - dy))
