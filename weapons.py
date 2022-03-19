@@ -6,6 +6,7 @@ from player import Position, ControllerLayout
 from pygame.draw import rect as draw_rect
 import config
 import math
+import time
 
 
 class Weapon:
@@ -45,17 +46,23 @@ class Arrow(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = initial_position.xy
 
+        self.inactive_start_time = 0
+
     def update(self):
         radians = math.radians(self.angle)
         if self.alive:
             self.rect.x += self.velocity * math.cos(radians) / config.FPS
             self.rect.y -= self.velocity * math.sin(radians) / config.FPS
+        elif time.time() - self.inactive_start_time >= 5:
+            del self
 
     def draw(self, screen):
         rotated_image = rotate(self.image, self.angle-90)
         #  draw_rect(screen, (255, 0, 0), self.rect)  <--- to see arrow rect bounds
         screen.blit(rotated_image, (self.rect.x, self.rect.y))
 
+    def __del__(self):
+        return
 
 class Bow(Weapon):
     def __init__(self, game):

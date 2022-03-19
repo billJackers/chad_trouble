@@ -4,6 +4,7 @@ import config
 from player import Player, ControllerLayout
 from wall import Grid
 from time import sleep
+import time
 
 
 class ChadTrouble:
@@ -72,7 +73,13 @@ class ChadTrouble:
             for arrows in collisions.values():
                 for arrow in arrows:
                     arrow.alive = False
+                    if arrow.inactive_start_time == 0:
+                        arrow.inactive_start_time = time.time()
 
+                    # Delete arrow 3 seconds it has hit a wall
+                    if time.time() - arrow.inactive_start_time >= 5:
+                        self.arrows.remove(arrow)
+                        del arrow
 
 if __name__ == "__main__":
     ct = ChadTrouble()
