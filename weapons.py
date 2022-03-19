@@ -1,7 +1,10 @@
+import pygame
 from pygame.transform import rotate
+from pygame.sprite import Sprite
 from pygame.image import load as load_image
 from player import Position, ControllerLayout
 from game import ChadTrouble
+import config
 import math
 
 
@@ -28,8 +31,10 @@ class Sword(Weapon):
         super().__init__(10, load_image("resources/images/swords/broadsword.png"))
 
 
-class Arrow:
+class Arrow(Sprite):
     def __init__(self, initial_position, initial_angle, input_type):
+        super().__init__()
+
         self.velocity = 1000
         self.angle = initial_angle
         self.alive = True
@@ -45,18 +50,18 @@ class Arrow:
             self.rect.y -= self.velocity * math.sin(radians) / config.FPS
 
     def draw(self, screen):
-        print("drawing")
         rotated_image = pygame.transform.rotate(self.image, self.angle-90)
         screen.blit(rotated_image, (self.rect.x, self.rect.y))
 
 
 class Bow(Weapon):
-    def __init__(self):
+    def __init__(self, game):
         super().__init__(15, load_image("resources/images/bow.png"))
+        self.game = game
 
     def attack(self, player_position, player_angle, input_type):
         arrow = Arrow(player_position, player_angle, input_type)
-        ChadTrouble.PROJECTILES.append(arrow)
+        self.game.arrows.add(arrow)
 
 
 

@@ -8,8 +8,6 @@ from time import sleep
 
 class ChadTrouble:
 
-    PROJECTILES = []
-
     def __init__(self):
         pygame.init()
 
@@ -22,9 +20,13 @@ class ChadTrouble:
 
         from weapons import Bow, Sword  # need the import here or else python will throw error
         player_one = Player(ControllerLayout.WASD, Sword())
-        player_two = Player(ControllerLayout.ARROW, Bow())
+        player_two = Player(ControllerLayout.ARROW, Bow(self))
 
         self.players = [player_one, player_two]
+
+        self.arrows = pygame.sprite.Group()
+
+        self.walls = pygame.sprite.Group()
 
         self.grid = Grid(10, 10)
         self.grid.create()
@@ -39,7 +41,7 @@ class ChadTrouble:
     def check_events(self):
 
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
-        [arrow.update() for arrow in ChadTrouble.PROJECTILES]  # handle arrows
+        [arrow.update() for arrow in self.arrows]  # handle arrows
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -48,17 +50,26 @@ class ChadTrouble:
 
             [player.handle_action(event) for player in self.players]  # updates player movement keys
 
+        self.check_arrow_wall_collisions()
+
     def update_screen(self):
         self.screen.fill((240, 240, 255))
 
         self.grid.draw(self.screen)
 
-        [arrow.draw(self.screen) for arrow in ChadTrouble.PROJECTILES]  # draws arrows
+        [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
 
         [player.update(self.screen) for player in self.players]  # draws players on screen
 
         pygame.display.flip()
 
+    def check_arrow_wall_collisions(self):
+        collisions = pygame.sprite.groupcollide(self.grid.walls, self.arrows, False, False)
+
+        if collisions:
+            for arrows in collisions.values():
+                for arrow in arrows:
+                    arrow.alive = False
 
 if __name__ == "__main__":
     ct = ChadTrouble()
