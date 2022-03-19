@@ -54,7 +54,7 @@ class ChadTrouble:
         self.grid.draw(self.screen)
 
         [arrow.draw(self.screen) for arrow in ChadTrouble.PROJECTILES]  # draws arrows
-        print(ChadTrouble.PROJECTILES)
+
         [player.update(self.screen) for player in self.players]  # draws players on screen
 
         pygame.display.flip()
