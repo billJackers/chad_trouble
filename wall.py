@@ -1,8 +1,8 @@
-import pygame
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 from player import Position, Player
 from pygame import Rect
 from pygame.draw import rect as draw_rect
+from pygame import Surface
 import config
 from random import randint
 
@@ -15,6 +15,7 @@ class Wall(Sprite):
     def __init__(self, position: Position, length: int, type: int):  # type is vertical (0) or horizonal (1)
         super().__init__()
         width, height = (config.WALL_WIDTH, length) if type == Wall.VERTICAL else (length, config.WALL_WIDTH)
+        self.image = Surface((width, height))
         self.rect = Rect(*position.xy, width, height)
 
     def draw(self, screen):
@@ -25,7 +26,7 @@ class Grid:
     def __init__(self, rows: int, cols: int):
         self.rows = rows
         self.cols = cols
-        self.walls = pygame.sprite.Group()  # our grid is 1D
+        self.walls = Group()  # our grid is 1D
 
     def create(self):
 

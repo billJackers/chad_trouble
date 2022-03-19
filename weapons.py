@@ -1,9 +1,9 @@
-import pygame
 from pygame.transform import rotate
 from pygame.sprite import Sprite
+from pygame.mask import from_surface as get_mask
 from pygame.image import load as load_image
 from player import Position, ControllerLayout
-from game import ChadTrouble
+from pygame.draw import rect as draw_rect
 import config
 import math
 
@@ -40,6 +40,8 @@ class Arrow(Sprite):
         self.alive = True
 
         self.image = load_image("resources/images/blue_arrow.bmp") if input_type == ControllerLayout.WASD else load_image("resources/images/red_arrow.bmp")
+        self.mask = get_mask(self.image)
+
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = initial_position.xy
 
@@ -50,7 +52,8 @@ class Arrow(Sprite):
             self.rect.y -= self.velocity * math.sin(radians) / config.FPS
 
     def draw(self, screen):
-        rotated_image = pygame.transform.rotate(self.image, self.angle-90)
+        rotated_image = rotate(self.image, self.angle-90)
+        draw_rect(screen, (255, 0, 0), self.rect)
         screen.blit(rotated_image, (self.rect.x, self.rect.y))
 
 

@@ -9,25 +9,27 @@ from time import sleep
 class ChadTrouble:
 
     def __init__(self):
+        # SCREEN INIT
         pygame.init()
-
         self.screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Chad Trouble")
 
+        # CLOCK
         self.clock = pygame.time.Clock()
         self.running = False
 
+        # PLAYERS
         from weapons import Bow, Sword  # need the import here or else python will throw error
         player_one = Player(ControllerLayout.WASD, Sword())
         player_two = Player(ControllerLayout.ARROW, Bow(self))
-
         self.players = [player_one, player_two]
 
+        # ARROWS
         self.arrows = pygame.sprite.Group()
 
+        # MAP
         self.walls = pygame.sprite.Group()
-
         self.grid = Grid(10, 10)
         self.grid.create()
 
@@ -64,7 +66,7 @@ class ChadTrouble:
         pygame.display.flip()
 
     def check_arrow_wall_collisions(self):
-        collisions = pygame.sprite.groupcollide(self.grid.walls, self.arrows, False, False)
+        collisions = pygame.sprite.groupcollide(self.grid.walls, self.arrows, False, False, collided=pygame.sprite.collide_mask)
 
         if collisions:
             for arrows in collisions.values():
