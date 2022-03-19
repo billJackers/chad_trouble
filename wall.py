@@ -33,6 +33,19 @@ class Grid:
         wall_x = int(config.WIDTH / self.cols)
         wall_y = int(config.HEIGHT / self.rows)
 
+        # First build a box so players can't go outside of the window
+        for x in range(self.cols):
+            top_wall = Wall(Position(x*wall_x, 0), wall_x, Wall.HORIZONTAL) # Top
+            self.walls.add(top_wall)
+            bottom_wall = Wall(Position(x*wall_x, config.HEIGHT-config.WALL_WIDTH), wall_x, Wall.HORIZONTAL)
+            self.walls.add(bottom_wall)
+
+        for y in range(self.rows):
+            left_wall = Wall(Position(0, y*wall_y), wall_y, Wall.VERTICAL) # Left
+            self.walls.add(left_wall)
+            right_wall = Wall(Position(config.WIDTH, y*wall_y), wall_y, Wall.VERTICAL)
+            self.walls.add(right_wall)
+
         for i in range(self.rows):
             for j in range(self.cols):
                 if randint(0, 1) == 1:  # horizonal walls
