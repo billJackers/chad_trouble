@@ -80,20 +80,15 @@ class Player:
                 self.position.y -= dy
             if (self.angle > 0 and self.angle < 180) and collision[3]:
                 self.position.y += dy
-            
-        if keys[self.input_keys.value[1]]:  # Handles LEFT / a
-            self.angle += self.rotation_velocity / FPS
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
-
             prev_pos = Position(self.position.x + dx, self.position.y - dy)
             self.position.x -= dx
             self.position.y += dy
 
-        if keys[self.input_keys.value[3]]:  # Handles RIGHT / d
-            self.angle -= self.rotation_velocity / FPS
-
+        self.angle += (self.rotation_velocity / FPS) * (bool(keys[self.input_keys.value[1]]) - bool(keys[self.input_keys.value[3]]))
         self.rect.x, self.rect.y = self.position.xy  # updating player rect coords
+
 
     def handle_action(self, event):
         if event.type == KEYDOWN:
