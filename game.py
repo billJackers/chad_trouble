@@ -61,7 +61,6 @@ class ChadTrouble:
         self.grid.draw(self.screen)
 
         [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
-
         [player.update(self.screen) for player in self.players]  # draws players on screen
 
         pygame.display.flip()
