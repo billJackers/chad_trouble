@@ -60,13 +60,22 @@ class Player:
         dx = self.velocity * math.cos(radians) / FPS
         dy = self.velocity * math.sin(radians) / FPS
 
+        collision = grid.is_collision(self)
+
         if keys[self.input_keys.value[0]]:  # Handles UP / W
 
             prev_pos = Position(self.position.x - dx, self.position.y + dy)
             self.position.x += dx
             self.position.y -= dy
-            if grid.is_collision(self):
-                self.position = prev_pos
+
+            if (self.angle > 270 or self.angle < 90) and collision == 1:
+                self.position.x -= dx
+            if (self.angle > 90 and self.angle < 270) and collision == 2:
+                self.position.x += dx
+            if (self.angle > 180 and self.angle < 360) and collision == 3:
+                self.position.y -= dy
+            if (self.angle > 0 and self.angle < 180) and collision == 4:
+                self.position.y += dy
             
         if keys[self.input_keys.value[1]]:  # Handles LEFT / a
             self.angle += self.rotation_velocity / FPS
@@ -76,8 +85,6 @@ class Player:
             prev_pos = Position(self.position.x + dx, self.position.y - dy)
             self.position.x -= dx
             self.position.y += dy
-            if grid.is_collision(self):
-                self.position = prev_pos
 
         if keys[self.input_keys.value[3]]:  # Handles RIGHT / d
             self.angle -= self.rotation_velocity / FPS
