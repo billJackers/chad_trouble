@@ -33,35 +33,38 @@ class Position:  # to handle x and y stuff more easily
 
 class Player:
     def __init__(self, layout: ControllerLayout, weapon):
-
+        # PLAYER LOADOUT
         self.input_keys = layout
         self.weapon = weapon
 
+        # PLAYER IMAGE
         self.image = load_image("resources/images/player/topdowngigachad.png") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
         self.rect = self.image.get_rect()
 
+        # MOVEMENT VARIABLES
         self.position = Position(20, 20)
         self.velocity = 100
         self.rotation_velocity = 500
         self.angle = 90  # Measured in degrees
 
     def update(self, screen):
+        # DRAW PLAYER AND WEAPON
         rotated_image = rotate(self.image, self.angle-90)
-        self.draw_weapon(screen)
+        self.weapon.draw(screen, self.position, self.angle)
         screen.blit(rotated_image, self.position.xy)
 
-    def draw_weapon(self, screen):
-        self.weapon.draw(screen, self.position, self.angle)
-
     def handle_movement(self, grid):  # grid for collision detection
+        # KEYS PRESSED
         keys = get_keys_pressed()
 
+        # POTENTIAL CHANGE IN POSITION
         radians = math.radians(self.angle)
         dx = self.velocity * math.cos(radians) / FPS
         dy = self.velocity * math.sin(radians) / FPS
 
         collision = grid.is_collision(self)
 
+        # INPUT CHECKS
         if keys[self.input_keys.value[0]]:  # Handles UP / W
 
             prev_pos = Position(self.position.x - dx, self.position.y + dy)

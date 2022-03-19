@@ -73,6 +73,7 @@ class ChadTrouble:
                 for arrow in arrows:
                     arrow.alive = False
 
+
 if __name__ == "__main__":
     ct = ChadTrouble()
     ct.run()
