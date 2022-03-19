@@ -53,7 +53,7 @@ class Arrow(Sprite):
 
     def draw(self, screen):
         rotated_image = rotate(self.image, self.angle-90)
-        draw_rect(screen, (255, 0, 0), self.rect)
+        #  draw_rect(screen, (255, 0, 0), self.rect)  <--- to see arrow rect bounds
         screen.blit(rotated_image, (self.rect.x, self.rect.y))
 
 
