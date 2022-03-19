@@ -32,8 +32,10 @@ class Position:  # to handle x and y stuff more easily
 
 
 class Player(Sprite):
-    def __init__(self, layout: ControllerLayout):
+    def __init__(self, layout: ControllerLayout, game):
         super().__init__()
+
+        self.game = game
 
         self.input_keys = layout
         self.weapon = weapons.Sword(10, load_image("resources/images/swords/broadsword.png"))
@@ -63,20 +65,22 @@ class Player(Sprite):
         radians = math.radians(self.angle)
 
         if keys[self.input_keys.value[0]]:  # Handles UP / W
-            self.moving_forward = True
             self.position.x += self.velocity * math.cos(radians) / FPS
             self.position.y -= self.velocity * math.sin(radians) / FPS
             
         if keys[self.input_keys.value[1]]:  # Handles LEFT / a
             self.angle += self.rotation_velocity / FPS
+            if self.angle > 360:
+                self.angle -= 360
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
-            self.moving_backward = True
             self.position.x -= self.velocity * math.cos(radians) / FPS
             self.position.y += self.velocity * math.sin(radians) / FPS
 
         if keys[self.input_keys.value[3]]:  # Handles RIGHT / d
             self.angle -= self.rotation_velocity / FPS
+            if self.angle < 0:
+                self.angle += 360
 
         self.rect.x = self.position.x
         self.rect.y = self.position.y

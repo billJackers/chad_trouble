@@ -18,8 +18,8 @@ class ChadTrouble:
         self.clock = pygame.time.Clock()
         self.running = False
 
-        player_one = Player(ControllerLayout.WASD)
-        player_two = Player(ControllerLayout.ARROW)
+        player_one = Player(ControllerLayout.WASD, self)
+        player_two = Player(ControllerLayout.ARROW, self)
 
         self.player_group = pygame.sprite.Group()
         self.player_group.add(player_one)
@@ -101,8 +101,8 @@ class ChadTrouble:
         if end_x - start_x <= 1 or end_y - start_y <= 2:
             return
         # Horizontal
-        hole = int(random.uniform(start_x, end_x-1))
-        y_level = int(random.uniform(start_y, end_y-1))
+        hole = int(random.uniform(start_x, end_x))
+        y_level = int(random.uniform(start_y, end_y))
 
         for x in range(start_x, end_x):
             if x != hole:
@@ -111,8 +111,8 @@ class ChadTrouble:
                 self.walls.add(new_wall)
 
         # Vertical
-        hole = int(random.uniform(start_y, end_y-1))
-        x_level = int(random.uniform(start_x, end_x-1))
+        hole = int(random.uniform(start_y, end_y))
+        x_level = int(random.uniform(start_x, end_x))
 
         for y in range(start_y, end_y):
             if y != hole:
