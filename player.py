@@ -1,3 +1,4 @@
+import pygame
 from pygame.image import load as load_image
 from pygame.transform import rotate
 from pygame.sprite import Sprite
@@ -71,13 +72,13 @@ class Player:
             self.position.x += dx
             self.position.y -= dy
 
-            if (self.angle > 270 or self.angle < 90) and collision == 1:
+            if (self.angle > 270 or self.angle < 90) and collision[0]:
                 self.position.x -= dx
-            if (self.angle > 90 and self.angle < 270) and collision == 2:
+            if (self.angle > 90 and self.angle < 270) and collision[1]:
                 self.position.x += dx
-            if (self.angle > 180 and self.angle < 360) and collision == 3:
+            if (self.angle > 180 and self.angle < 360) and collision[2]:
                 self.position.y -= dy
-            if (self.angle > 0 and self.angle < 180) and collision == 4:
+            if (self.angle > 0 and self.angle < 180) and collision[3]:
                 self.position.y += dy
             
         if keys[self.input_keys.value[1]]:  # Handles LEFT / a
