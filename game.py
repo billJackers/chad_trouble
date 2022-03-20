@@ -50,6 +50,10 @@ class ChadTrouble:
             if event.type == pygame.QUIT:
                 self.running = False
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_q:
+                self.running = False
+                sys.exit()
 
             [player.handle_action(event) for player in self.players]  # updates player movement keys
 
