@@ -64,12 +64,12 @@ class Grid:
         collisions = [False, False, False, False]
         for wall in self.walls:
             if wall.rect.colliderect(player.rect):
-                if wall.rect.left < player.rect.right:
+                if wall.rect.collidepoint((player.rect.right, player.rect.centery)):
                     collisions[0] = True # Collides from the left
-                if wall.rect.right > player.rect.left:
+                if wall.rect.collidepoint((player.rect.left, player.rect.centery)):
                     collisions[1] = True # Collides from the right
-                if wall.rect.top < player.rect.bottom:
+                if wall.rect.collidepoint((player.rect.centerx, player.rect.bottom)):
                     collisions[2] = True # Collides from the top
-                if wall.rect.bottom > player.rect.top:
+                if wall.rect.collidepoint((player.rect.centerx, player.rect.top)):
                     collisions[3] = True # Collides from the bottom
         return collisions

@@ -44,7 +44,7 @@ class Player:
 
         # MOVEMENT VARIABLES
         self.position = Position(20, 20)
-        self.velocity = 100
+        self.velocity = 1
         self.rotation_velocity = 500
         self.angle = 90  # Measured in degrees
 
@@ -60,10 +60,11 @@ class Player:
 
         # POTENTIAL CHANGE IN POSITION
         radians = math.radians(self.angle)
-        dx = self.velocity * math.cos(radians) / FPS
-        dy = self.velocity * math.sin(radians) / FPS
+        dx = self.velocity * math.cos(radians) #/ FPS
+        dy = self.velocity * math.sin(radians) #/ FPS
 
         collision = grid.is_collision(self)
+        print(collision)
 
         # INPUT CHECKS
         if keys[self.input_keys.value[0]]:  # Handles UP / W
