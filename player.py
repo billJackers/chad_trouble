@@ -64,7 +64,6 @@ class Player:
         dy = self.velocity * math.sin(radians) #/ FPS
 
         collision = grid.is_collision(self)
-        print(collision)
 
         # INPUT CHECKS
         if keys[self.input_keys.value[0]]:  # Handles UP / W
