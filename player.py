@@ -32,11 +32,15 @@ class Position:  # to handle x and y stuff more easily
     xy = property(_get_xy, _set_xy)
 
 
-class Player:
+class Player(Sprite):
     def __init__(self, layout: ControllerLayout, weapon):
+        super().__init__()
+        
         # PLAYER LOADOUT
         self.input_keys = layout
         self.weapon = weapon
+
+        self.health = 100
 
         # PLAYER IMAGE
         self.image = load_image("resources/images/player/topdowngigachad.png") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
@@ -45,7 +49,7 @@ class Player:
         # MOVEMENT VARIABLES
         self.position = Position(20, 20)
         self.velocity = 1
-        self.rotation_velocity = 500
+        self.rotation_velocity = 400
         self.angle = 90  # Measured in degrees
 
     def update(self, screen):

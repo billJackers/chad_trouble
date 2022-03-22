@@ -40,6 +40,10 @@ class Arrow(Sprite):
         self.angle = initial_angle
         self.alive = True
 
+        self.damage = 20
+
+        self.input_type = input_type
+
         self.image = load_image("resources/images/blue_arrow.bmp") if input_type == ControllerLayout.WASD else load_image("resources/images/red_arrow.bmp")
         self.mask = get_mask(self.image)
 

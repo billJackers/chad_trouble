@@ -5,6 +5,7 @@ from player import Player, ControllerLayout
 from wall import Grid
 from time import sleep
 import time
+from displays import Displays
 
 
 class ChadTrouble:
@@ -22,9 +23,11 @@ class ChadTrouble:
 
         # PLAYERS
         from weapons import Bow, Sword  # need the import here or else python will throw error
-        player_one = Player(ControllerLayout.WASD, Sword())
-        player_two = Player(ControllerLayout.ARROW, Bow(self))
-        self.players = [player_one, player_two]
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_two = Player(ControllerLayout.ARROW, Bow(self))
+        self.players = pygame.sprite.Group()
+        self.players.add(self.player_one)
+        self.players.add(self.player_two)
 
         # ARROWS
         self.arrows = pygame.sprite.Group()
@@ -33,6 +36,9 @@ class ChadTrouble:
         self.walls = pygame.sprite.Group()
         self.grid = Grid(10, 10)
         self.grid.create()
+
+        # DISPLAYS
+        self.displays = Displays(self)
 
     def run(self):
         self.running = True
@@ -58,6 +64,7 @@ class ChadTrouble:
             [player.handle_action(event) for player in self.players]  # updates player movement keys
 
         self.check_arrow_wall_collisions()
+        self.check_arrow_player_collisions()
 
     def update_screen(self):
         self.screen.fill((240, 240, 255))
@@ -66,6 +73,8 @@ class ChadTrouble:
 
         [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
         [player.update(self.screen) for player in self.players]  # draws players on screen
+
+        self.displays.update_displays()
 
         pygame.display.flip()
 
@@ -83,6 +92,20 @@ class ChadTrouble:
                     if time.time() - arrow.inactive_start_time >= 5:
                         self.arrows.remove(arrow)
                         del arrow
+
+    def check_arrow_player_collisions(self):
+        collisions = pygame.sprite.groupcollide(self.arrows, self.players, False, False, collided=pygame.sprite.collide_mask)
+        ret_arrow = pygame.sprite.groupcollide(self.players, self.arrows, False, False)
+
+        if collisions:
+            for players in collisions.values():
+                for player in players:
+                    for arrows in ret_arrow.values():
+                        for arrow in arrows:
+                            if arrow.alive and arrow.input_type != player.input_keys:
+                                player.health -= arrow.damage
+                                print(player.health)
+                                self.arrows.remove(arrow)
 
 if __name__ == "__main__":
     ct = ChadTrouble()
