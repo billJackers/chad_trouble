@@ -7,6 +7,7 @@ from pygame.draw import rect as draw_rect
 import config
 import math
 import time
+import random
 
 
 class Weapon:
@@ -72,10 +73,13 @@ class Bow(Weapon):
     def __init__(self, game):
         super().__init__(15, load_image("resources/images/bow.png"))
         self.game = game
+        self.num_arrows = int(random.uniform(2, 5))
+
+        print(str(self.num_arrows) + " arrows")
 
     def attack(self, player_position, player_angle, input_type):
-        arrow = Arrow(player_position, player_angle, input_type)
-        self.game.arrows.add(arrow)
+        if self.num_arrows > 0:
+            arrow = Arrow(player_position, player_angle, input_type)
+            self.game.arrows.add(arrow)
 
-
-
+        self.num_arrows -= 1
