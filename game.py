@@ -72,6 +72,10 @@ class ChadTrouble:
     def check_events(self):
         """Check keyboard events and collisions"""
 
+        # CHECK COLLISIONS
+        self.check_arrow_wall_collisions()
+        self.check_arrow_player_collisions()
+
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
         [arrow.update() for arrow in self.arrows]  # handle arrows
 
@@ -86,20 +90,13 @@ class ChadTrouble:
 
             [player.handle_action(event) for player in self.players]  # updates player movement keys
 
-        self.check_arrow_wall_collisions()
-        self.check_arrow_player_collisions()
-
     def update_screen(self):
         """Update the screen"""
         self.screen.fill(config.BG_COLOR)
-
         self.grid.draw(self.screen)
-
         [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
         [player.update(self.screen) for player in self.players]  # draws players on screen
-
         self.displays.update_displays()
-
         pygame.display.flip()
 
     def check_arrow_wall_collisions(self):

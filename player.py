@@ -58,6 +58,8 @@ class Player(Sprite):
         # DRAW PLAYER AND WEAPON
         if self.weapon.weapon_type == "Sword":
             self.weapon.update_swing(self.position, self.angle, self.input_keys)
+
+        draw.rect(screen, (255, 0, 0), self.rect)
         rotated_image = rotate(self.image, self.angle-90)
         self.weapon.draw(screen, self.position, self.angle)
         screen.blit(rotated_image, self.position.xy)
@@ -71,32 +73,23 @@ class Player(Sprite):
         dx = self.velocity * math.cos(radians) #/ FPS
         dy = self.velocity * math.sin(radians) #/ FPS
 
-        collision = grid.is_collision(self)
-
         # INPUT CHECKS
         if keys[self.input_keys.value[0]]:  # Handles UP / W
-
-            # prev_pos = Position(self.position.x - dx, self.position.y + dy)
-            if (self.angle > 270 or self.angle < 90) and collision[0]:
-                dx = 0
-            if (self.angle > 90 and self.angle < 270) and collision[1]:
-                dx = 0
-            if (self.angle > 180 and self.angle < 360) and collision[2]:
-                dy = 0
-            if (self.angle > 0 and self.angle < 180) and collision[3]:
-                dy = 0
-
+            prev_pos = Position(self.position.x - dx, self.position.y + dy)
             self.position.x += dx
             self.position.y -= dy
+            if grid.is_collision(self):
+                self.position = prev_pos
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
             prev_pos = Position(self.position.x + dx, self.position.y - dy)
             self.position.x -= dx
             self.position.y += dy
+            if grid.is_collision(self):
+                self.position = prev_pos
 
         self.angle += (self.rotation_velocity / FPS) * (bool(keys[self.input_keys.value[1]]) - bool(keys[self.input_keys.value[3]]))
         self.rect.x, self.rect.y = self.position.xy  # updating player rect coords
-
 
     def handle_action(self, event):
         if event.type == KEYDOWN:

@@ -63,7 +63,7 @@ class StartMenu:
         image = pygame.image.load("resources/images/title_label.png")
 
         height_to_width_ratio = image.get_rect().height/image.get_rect().width
-        image = pygame.transform.scale(image, (300/height_to_width_ratio, 300))
+        image = pygame.transform.scale(image, (int(300/height_to_width_ratio), 300))
 
         image_rect = image.get_rect()
 
@@ -77,7 +77,7 @@ class StartMenu:
 
         height_to_width_ratio = image.get_rect().height/image.get_rect().width
 
-        image = pygame.transform.scale(image, (config.HEIGHT / height_to_width_ratio, config.HEIGHT))
+        image = pygame.transform.scale(image, (int(config.HEIGHT / height_to_width_ratio), config.HEIGHT))
 
         image_rect = image.get_rect()
 

@@ -67,6 +67,7 @@ class Sword(Weapon):
             self.angle_increment += 1
             self.image = rotate(self.image, player_angle + self.angle_increment)
 
+
 class Arrow(Sprite):
     def __init__(self, initial_position, initial_angle, input_type):
         super().__init__()

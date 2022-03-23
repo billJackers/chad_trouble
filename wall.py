@@ -1,4 +1,4 @@
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Sprite, Group, spritecollide
 from player import Position, Player
 from pygame import Rect
 from pygame.draw import rect as draw_rect
@@ -64,14 +64,8 @@ class Grid:
 
     def is_collision(self, player: Player):
         """Detect player-wall collisions"""
-        collisions = [False, False, False, False]
-        for wall in self.walls:
-            if wall.rect.collidepoint(player.rect.midright):
-                collisions[0] = True # Collides from the left
-            if wall.rect.collidepoint(player.rect.midleft):
-                collisions[1] = True # Collides from the right
-            if wall.rect.collidepoint(player.rect.midbottom):
-                collisions[2] = True # Collides from the top
-            if wall.rect.collidepoint(player.rect.midtop):
-                collisions[3] = True # Collides from the bottom
-        return collisions
+        prev_rect = player.rect
+        player.rect.x, player.rect.y = player.position.xy
+        collision = spritecollide(player, self.walls, False, False)
+        player.rect = prev_rect
+        return collision
