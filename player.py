@@ -59,7 +59,6 @@ class Player(Sprite):
         if self.weapon.weapon_type == "Sword":
             self.weapon.update_swing(self.position, self.angle, self.input_keys)
 
-        draw.rect(screen, (255, 0, 0), self.rect)
         rotated_image = rotate(self.image, self.angle-90)
         self.weapon.draw(screen, self.position, self.angle)
         screen.blit(rotated_image, self.position.xy)
