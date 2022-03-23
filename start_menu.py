@@ -17,10 +17,13 @@ class StartMenu:
         self.credits_button = Button(300, 100, "CREDITS", 0, 300, (167, 88, 162), game)
         self.quit_button = Button(300, 100, "QUIT", 0, 400, (178, 111, 174), game)
 
+        self.buttons = [self.start_button, self.settings_button, self.help_button, self.credits_button, self.quit_button]
+
         self.game_active = False
     
     def check_button_pressed(self, mouse_pos):
         """Check when button has been pressed"""
+        
         # Start button
         start_button_clicked = self.start_button.rect.collidepoint(mouse_pos)
         if not self.game_active and start_button_clicked:
@@ -36,11 +39,8 @@ class StartMenu:
         if not self.game_active:
             self.display_image()
 
-            self.start_button.draw_button()
-            self.settings_button.draw_button()
-            self.help_button.draw_button()
-            self.credits_button.draw_button()
-            self.quit_button.draw_button()
+            for button in self.buttons:
+                button.draw_button()
 
             self.display_title()
 
