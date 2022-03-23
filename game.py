@@ -11,6 +11,7 @@ from displays import Displays
 class ChadTrouble:
 
     def __init__(self):
+        """Initialize game"""
         # SCREEN INIT
         pygame.init()
         self.screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
@@ -23,8 +24,8 @@ class ChadTrouble:
 
         # PLAYERS
         from weapons import Bow, Sword  # need the import here or else python will throw error
-        self.player_one = Player(ControllerLayout.WASD, Bow(self))
-        self.player_two = Player(ControllerLayout.ARROW, Bow(self))
+        self.player_one = Player(ControllerLayout.WASD, Sword())
+        self.player_two = Player(ControllerLayout.ARROW, Sword())
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
@@ -41,6 +42,7 @@ class ChadTrouble:
         self.displays = Displays(self)
 
     def run(self):
+        """Game loop"""
         self.running = True
         while self.running:
             self.clock.tick(config.FPS)
@@ -48,6 +50,7 @@ class ChadTrouble:
             self.update_screen()
 
     def check_events(self):
+        """Check keyboard events and collisions"""
 
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
         [arrow.update() for arrow in self.arrows]  # handle arrows
@@ -67,6 +70,7 @@ class ChadTrouble:
         self.check_arrow_player_collisions()
 
     def update_screen(self):
+        """Update the screen"""
         self.screen.fill((240, 240, 255))
 
         self.grid.draw(self.screen)
@@ -79,6 +83,7 @@ class ChadTrouble:
         pygame.display.flip()
 
     def check_arrow_wall_collisions(self):
+        """Check for when an arrow hits a wall"""
         collisions = pygame.sprite.groupcollide(self.grid.walls, self.arrows, False, False, collided=pygame.sprite.collide_mask)
 
         if collisions:
@@ -94,6 +99,7 @@ class ChadTrouble:
                         del arrow
 
     def check_arrow_player_collisions(self):
+        """Check for when an arrow hits a player"""
         collisions = pygame.sprite.groupcollide(self.arrows, self.players, False, False, collided=pygame.sprite.collide_mask)
         ret_arrow = pygame.sprite.groupcollide(self.players, self.arrows, False, False)
 

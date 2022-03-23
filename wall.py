@@ -8,6 +8,7 @@ from random import randint
 
 
 class Wall(Sprite):
+    """A class that manages walls to block players and weapons"""
 
     VERTICAL = 0
     HORIZONTAL = 1
@@ -23,13 +24,14 @@ class Wall(Sprite):
 
 
 class Grid:
+    """A maze of walls"""
     def __init__(self, rows: int, cols: int):
         self.rows = rows
         self.cols = cols
         self.walls = Group()  # our grid is 1D
 
     def create(self):
-
+        """Generate the maze"""
         wall_x = int(config.WIDTH / self.cols)
         wall_y = int(config.HEIGHT / self.rows)
 
@@ -61,6 +63,7 @@ class Grid:
             wall.draw(screen)
 
     def is_collision(self, player: Player):
+        """Detect player-wall collisions"""
         collisions = [False, False, False, False]
         for wall in self.walls:
             if wall.rect.collidepoint(player.rect.midright):

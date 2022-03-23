@@ -1,8 +1,10 @@
 import pygame.font
 
 class Displays:
+    """A class to manage displayed info, such as health bars"""
 
     def __init__(self, game):
+        """Initialize attributes"""        
         self.game = game
         self.screen = game.screen
         self.screen_rect = self.screen.get_rect()
@@ -19,6 +21,7 @@ class Displays:
         self.display_health_bars()
 
     def display_health_bars(self):
+        """Draw health bars"""
         # Player one
         player_one_label = self.font.render("Chad", True, self.text_color)
         player_one_label_rect = player_one_label.get_rect()

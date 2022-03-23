@@ -19,6 +19,7 @@ class ControllerLayout(Enum):  # for different keyboard movements
 
 
 class Position:  # to handle x and y stuff more easily
+    """Stores info about an object's position"""
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -33,6 +34,7 @@ class Position:  # to handle x and y stuff more easily
 
 
 class Player(Sprite):
+    """A class to manage player movements, attacks, etc"""
     def __init__(self, layout: ControllerLayout, weapon):
         super().__init__()
         

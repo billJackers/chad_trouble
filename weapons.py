@@ -10,8 +10,10 @@ import time
 import random
 
 
-class Weapon:
+class Weapon(Sprite):
+    """Parent class for all weapons"""
     def __init__(self, damage: int, sprite):
+        super().__init__()
         self.damage = damage
         self.image = sprite
 
@@ -25,13 +27,24 @@ class Weapon:
         screen.blit(rotated_image, (position.x + dx, position.y - dy))
 
     def attack(self, player_position: Position, player_angle: float, input_type: ControllerLayout):  # player position is a Position() from player.py
+        """Attempts to deal damage to another player"""
         print("override to implement an attack")
 
 
 class Sword(Weapon):
     def __init__(self):
-        super().__init__(10, load_image("resources/images/swords/broadsword.png"))
+        self.image = load_image("resources/images/swords/broadsword.png")
+        super().__init__(10, self.image)
+        self.swinging = False
+        self.swing_speed = 1
+        self.angle_increment = 0
 
+        self.attack_start_time = 0
+
+    def attack(self, player_position, player_angle, input_type):
+        """Sword swings 90 degrees in front of player"""
+        # TODO
+        return
 
 class Arrow(Sprite):
     def __init__(self, initial_position, initial_angle, input_type):
@@ -78,6 +91,7 @@ class Bow(Weapon):
         print(str(self.num_arrows) + " arrows")
 
     def attack(self, player_position, player_angle, input_type):
+        """Fire arrow"""
         if self.num_arrows > 0:
             arrow = Arrow(player_position, player_angle, input_type)
             self.game.arrows.add(arrow)
