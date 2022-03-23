@@ -24,9 +24,10 @@ class ChadTrouble:
 
         # AUDIO INIT
         mixer.init()
-        mixer.music.load("resources/sounds/temp_song.mp3")
-        mixer.music.set_volume(1)
-        mixer.music.play(-1)
+        self.song = pygame.mixer.Sound("resources/sounds/temp_song.mp3")
+        self.music_volume = 100
+        self.song.set_volume(self.music_volume/100)
+        self.song.play(-1)
 
         # CLOCK
         self.clock = pygame.time.Clock()
