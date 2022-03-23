@@ -1,5 +1,6 @@
 import pygame
 from pygame import mixer
+import pygame.font
 import sys
 import config
 from player import Player, ControllerLayout
@@ -8,6 +9,7 @@ from time import sleep
 import time
 from displays import Displays
 from start_menu import StartMenu
+from button import Button
 
 class ChadTrouble:
 
@@ -35,8 +37,8 @@ class ChadTrouble:
 
         # PLAYERS
         from weapons import Bow, Sword  # need the import here or else python will throw error
-        self.player_one = Player(ControllerLayout.WASD, Sword())
-        self.player_two = Player(ControllerLayout.ARROW, Sword())
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_two = Player(ControllerLayout.ARROW, Bow(self))
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
@@ -93,11 +95,17 @@ class ChadTrouble:
 
     def update_screen(self):
         """Update the screen"""
-        self.screen.fill(config.BG_COLOR)
-        self.grid.draw(self.screen)
-        [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
-        [player.update(self.screen) for player in self.players]  # draws players on screen
-        self.displays.update_displays()
+        if self.sm.game_active and self.player_one.health > 0 and self.player_two.health > 0:
+            self.screen.fill(config.BG_COLOR)
+            self.grid.draw(self.screen)
+            [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
+            [player.update(self.screen) for player in self.players]  # draws players on screen
+            self.displays.update_displays()
+        elif self.player_one.health <= 0:
+            self.display_win_screen(2)
+        elif self.player_two.health <= 0:
+            self.display_win_screen(1)
+
         pygame.display.flip()
 
     def check_arrow_wall_collisions(self):
@@ -130,6 +138,18 @@ class ChadTrouble:
                                 player.health -= arrow.damage
                                 print(player.health)
                                 self.arrows.remove(arrow)
+
+    def display_win_screen(self, winner):
+        s = "PLAYER ONE WINS!!!"
+        if winner == 2:
+            s = "PLAYER TWO WINS!!!"
+
+        font = pygame.font.SysFont(None, 100)
+        s_image = font.render(s, True, (0, 0, 0), config.BG_COLOR)
+        s_image_rect = s_image.get_rect()
+        s_image_rect.center = self.screen_rect.center
+
+        self.screen.blit(s_image, s_image_rect)
 
 if __name__ == "__main__":
     ct = ChadTrouble()

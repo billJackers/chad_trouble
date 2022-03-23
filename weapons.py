@@ -108,7 +108,7 @@ class Bow(Weapon):
     def __init__(self, game):
         super().__init__(15, load_image("resources/images/bow.png"))
         self.game = game
-        self.num_arrows = int(random.uniform(2, 5))
+        self.num_arrows = 200#int(random.uniform(2, 5))
 
         self.weapon_type = "Bow"
 
