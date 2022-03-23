@@ -7,7 +7,7 @@ from wall import Grid
 from time import sleep
 import time
 from displays import Displays
-
+from start_menu import StartMenu
 
 class ChadTrouble:
 
@@ -18,6 +18,9 @@ class ChadTrouble:
         self.screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Chad Trouble")
+
+        # START MENU
+        self.sm = StartMenu(self)
 
         # AUDIO INIT
         mixer.init()
@@ -50,6 +53,16 @@ class ChadTrouble:
 
     def run(self):
         """Game loop"""
+        while not self.sm.game_active:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    self.sm.check_button_pressed(mouse_pos)
+
+            self.screen.fill((76, 31, 31))
+            self.sm.display()
+            pygame.display.flip()
+
         self.running = True
         while self.running:
             self.clock.tick(config.FPS)
@@ -78,7 +91,7 @@ class ChadTrouble:
 
     def update_screen(self):
         """Update the screen"""
-        self.screen.fill((240, 240, 255))
+        self.screen.fill(config.BG_COLOR)
 
         self.grid.draw(self.screen)
 
