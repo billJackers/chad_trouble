@@ -56,6 +56,8 @@ class Player(Sprite):
 
     def update(self, screen):
         # DRAW PLAYER AND WEAPON
+        if self.weapon.weapon_type == "Sword":
+            self.weapon.update_swing(self.position, self.angle, self.input_keys)
         rotated_image = rotate(self.image, self.angle-90)
         self.weapon.draw(screen, self.position, self.angle)
         screen.blit(rotated_image, self.position.xy)
@@ -74,18 +76,18 @@ class Player(Sprite):
         # INPUT CHECKS
         if keys[self.input_keys.value[0]]:  # Handles UP / W
 
-            prev_pos = Position(self.position.x - dx, self.position.y + dy)
+            # prev_pos = Position(self.position.x - dx, self.position.y + dy)
+            if (self.angle > 270 or self.angle < 90) and collision[0]:
+                dx = 0
+            if (self.angle > 90 and self.angle < 270) and collision[1]:
+                dx = 0
+            if (self.angle > 180 and self.angle < 360) and collision[2]:
+                dy = 0
+            if (self.angle > 0 and self.angle < 180) and collision[3]:
+                dy = 0
+
             self.position.x += dx
             self.position.y -= dy
-
-            if (self.angle > 270 or self.angle < 90) and collision[0]:
-                self.position.x -= dx
-            if (self.angle > 90 and self.angle < 270) and collision[1]:
-                self.position.x += dx
-            if (self.angle > 180 and self.angle < 360) and collision[2]:
-                self.position.y -= dy
-            if (self.angle > 0 and self.angle < 180) and collision[3]:
-                self.position.y += dy
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
             prev_pos = Position(self.position.x + dx, self.position.y - dy)

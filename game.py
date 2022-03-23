@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 import sys
 import config
 from player import Player, ControllerLayout
@@ -17,6 +18,12 @@ class ChadTrouble:
         self.screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption("Chad Trouble")
+
+        # AUDIO INIT
+        mixer.init()
+        mixer.music.load("resources/sounds/temp_song.mp3")
+        mixer.music.set_volume(1)
+        mixer.music.play(-1)
 
         # CLOCK
         self.clock = pygame.time.Clock()

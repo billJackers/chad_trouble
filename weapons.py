@@ -39,12 +39,33 @@ class Sword(Weapon):
         self.swing_speed = 1
         self.angle_increment = 0
 
-        self.attack_start_time = 0
+        self.rect = self.image.get_rect()
+
+        self.weapon_type = "Sword"
+
+        # self.attack_start_time = 0
 
     def attack(self, player_position, player_angle, input_type):
-        """Sword swings 90 degrees in front of player"""
-        # TODO
+        if self.swinging:
+            return
+        self.swinging = True
+        self.angle_increment = -45
+        # self.attack_start_time = time.time()
+
+    def update_swing(self, player_position, player_angle, input_type):
         return
+
+        # The code below doesn't work, sorry
+        # TODO
+        self.rect.centerx = player_position.x + math.cos(math.radians(self.angle_increment))
+        self.rect.centery = player_position.y + math.sin(math.radians(self.angle_increment))
+        if self.angle_increment >= 45:
+            self.swinging = False
+            self.angle_increment = 0
+            return
+        if self.swinging:
+            self.angle_increment += 1
+            self.image = rotate(self.image, player_angle + self.angle_increment)
 
 class Arrow(Sprite):
     def __init__(self, initial_position, initial_angle, input_type):
@@ -87,6 +108,8 @@ class Bow(Weapon):
         super().__init__(15, load_image("resources/images/bow.png"))
         self.game = game
         self.num_arrows = int(random.uniform(2, 5))
+
+        self.weapon_type = "Bow"
 
         print(str(self.num_arrows) + " arrows")
 
