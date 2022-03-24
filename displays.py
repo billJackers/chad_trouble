@@ -22,6 +22,7 @@ class Displays:
     def update_displays(self):
         self.display_health_bars()
         self.display_arrows_left()
+        self.display_num_wins()
 
     def display_health_bars(self):
         """Draw health bars"""
@@ -59,12 +60,29 @@ class Displays:
 
     def display_arrows_left(self):
         """Show how many arrows are left"""
-        if self.game.player_one.weapon.weapon_type == "Bow":
-            for arrow in range(self.game.player_one.num_arrows):
-                arrow_image = pygame.image.load("resources/images/blue_arrow.bmp")
-                self.screen.blit(arrow_image, (10 + (arrow * 10), self.screen_rect.bottom-85))
 
-        if self.game.player_two.weapon.weapon_type == "Bow":
-            for arrow in range(self.game.player_two.num_arrows):
-                arrow_image = pygame.image.load("resources/images/red_arrow.bmp")
-                self.screen.blit(arrow_image, (self.screen_rect.right - 45 - (arrow * 10), self.screen_rect.bottom-85))
+        for arrow in range(self.game.player_one.num_arrows):
+            arrow_image = pygame.image.load("resources/images/blue_arrow.bmp")
+            self.screen.blit(arrow_image, (10 + (arrow * 10), self.screen_rect.bottom-85))
+
+        for arrow in range(self.game.player_two.num_arrows):
+            arrow_image = pygame.image.load("resources/images/red_arrow.bmp")
+            self.screen.blit(arrow_image, (self.screen_rect.right - 45 - (arrow * 10), self.screen_rect.bottom-85))
+
+    def display_num_wins(self):
+        """Show the score"""
+
+        new_font = pygame.font.SysFont(None, 50)
+
+        player_one_wins = new_font.render(str(self.game.player_one_wins), True, (0, 0, 0))
+        player_one_wins_rect = player_one_wins.get_rect()
+        player_one_wins_rect.left = 90
+        player_one_wins_rect.bottom = self.screen_rect.bottom - 10
+
+        player_two_wins = new_font.render(str(self.game.player_two_wins), True, (0, 0, 0))
+        player_two_wins_rect = player_two_wins.get_rect()
+        player_two_wins_rect.right = self.screen_rect.right - 90
+        player_two_wins_rect.bottom = self.screen_rect.bottom - 10
+
+        self.screen.blit(player_one_wins, player_one_wins_rect)
+        self.screen.blit(player_two_wins, player_two_wins_rect)

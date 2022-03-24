@@ -46,7 +46,7 @@ class ChadTrouble:
 
         # ITEMS
         self.prev_arrow_spawn_time = time.time()
-        self.arrow_spawn_interval = random.uniform(30, 50)
+        self.arrow_spawn_interval = random.uniform(10, 15)
         self.arrow_items = pygame.sprite.Group()
 
         # START MENU
@@ -69,6 +69,9 @@ class ChadTrouble:
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
+
+        self.player_one_wins = 0
+        self.player_two_wins = 0
 
         # ARROWS
         self.arrows = pygame.sprite.Group()
@@ -109,7 +112,11 @@ class ChadTrouble:
         self.check_arrow_player_collisions()
         for player in self.players:
             if player.health <= 0:
-                print("Player died")
+                if player == self.player_one:
+                    self.player_two_wins += 1
+                else:
+                    self.player_one_wins += 1
+
                 self.new_game()
 
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
@@ -144,17 +151,13 @@ class ChadTrouble:
 
     def update_screen(self):
         """Update the screen"""
-        if self.sm.game_active and self.player_one.health > 0 and self.player_two.health > 0:
+        if self.sm.game_active:
             self.screen.fill(config.BG_COLOR)
             self.grid.draw(self.screen)
             [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
             [player.update(self.screen) for player in self.players]  # draws players on screen
             self.display_items()
             self.displays.update_displays()
-        elif self.player_one.health <= 0:
-            self.display_win_screen(2)
-        elif self.player_two.health <= 0:
-            self.display_win_screen(1)
 
         pygame.display.flip()
 
@@ -236,6 +239,8 @@ class ChadTrouble:
         self.player_one = Player(ControllerLayout.WASD, Bow(self))
         self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players.empty()
+        self.arrow_items.empty()
+        self.prev_arrow_spawn_time = time.time()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
 

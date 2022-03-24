@@ -96,8 +96,9 @@ class Player(Sprite):
     def handle_action(self, event):
         if event.type == KEYDOWN:
             if event.key == self.input_keys.value[4]:
-                if self.weapon.weapon_type == "Bow" and self.num_arrows == 0:
-                    return
+                if self.weapon.weapon_type == "Bow":
+                    if self.num_arrows == 0:
+                        return
+                    else:
+                        self.num_arrows -= 1
                 self.weapon.attack(self.position, self.angle, self.input_keys)
-            
-
