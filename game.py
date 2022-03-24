@@ -8,6 +8,7 @@ from time import sleep
 import time
 from displays import Displays
 from start_menu import StartMenu
+from weapons import Bow, Sword
 
 class ChadTrouble:
 
@@ -25,7 +26,7 @@ class ChadTrouble:
         # AUDIO INIT
         mixer.init()
         self.song = pygame.mixer.Sound("resources/sounds/temp_song.mp3")
-        self.music_volume = 100
+        self.music_volume = 50
         self.song.set_volume(self.music_volume/100)
         self.song.play(-1)
 
@@ -34,8 +35,7 @@ class ChadTrouble:
         self.running = False
 
         # PLAYERS
-        from weapons import Bow, Sword  # need the import here or else python will throw error
-        self.player_one = Player(ControllerLayout.WASD, Sword())
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
         self.player_two = Player(ControllerLayout.ARROW, Sword())
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
@@ -47,13 +47,14 @@ class ChadTrouble:
         # MAP
         self.walls = pygame.sprite.Group()
         self.grid = Grid(10, 10)
-        self.grid.create()
+        self.grid.create(self.players)
 
         # DISPLAYS
         self.displays = Displays(self)
 
     def run(self):
         """Game loop"""
+        #  MENU LOOP
         while not self.sm.game_active:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -64,6 +65,7 @@ class ChadTrouble:
             self.sm.display()
             pygame.display.flip()
 
+        # GAME LOOP
         self.running = True
         while self.running:
             self.clock.tick(config.FPS)
@@ -76,6 +78,10 @@ class ChadTrouble:
         # CHECK COLLISIONS
         self.check_arrow_wall_collisions()
         self.check_arrow_player_collisions()
+        for player in self.players:
+            if player.health <= 0:
+                print("Player died")
+                self.new_game()
 
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
         [arrow.update() for arrow in self.arrows]  # handle arrows
@@ -130,6 +136,22 @@ class ChadTrouble:
                                 player.health -= arrow.damage
                                 print(player.health)
                                 self.arrows.remove(arrow)
+
+    def new_game(self):
+        # PLAYER
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_two = Player(ControllerLayout.ARROW, Sword())
+        self.players.empty()
+        self.players.add(self.player_one)
+        self.players.add(self.player_two)
+
+        # ARROWS
+        self.arrows.empty()
+
+        # MAP
+        self.walls.empty()
+        self.grid = Grid(10, 10)
+        self.grid.create(self.players)
 
 if __name__ == "__main__":
     ct = ChadTrouble()

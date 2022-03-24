@@ -90,6 +90,10 @@ class Player(Sprite):
         self.angle += (self.rotation_velocity / FPS) * (bool(keys[self.input_keys.value[1]]) - bool(keys[self.input_keys.value[3]]))
         self.rect.x, self.rect.y = self.position.xy  # updating player rect coords
 
+    def set_position(self, x, y):
+        self.position.xy = x, y
+        self.rect.x, self.rect.y = x, y
+
     def handle_action(self, event):
         if event.type == KEYDOWN:
             if event.key == self.input_keys.value[4]:
