@@ -137,7 +137,7 @@ class StartMenu:
 
         height_to_width_ratio = image.get_rect().height/image.get_rect().width
 
-        image = pygame.transform.scale(image, (0.75 * config.HEIGHT / height_to_width_ratio, config.HEIGHT * 0.75))
+        image = pygame.transform.scale(image, (int(0.75 * config.HEIGHT / height_to_width_ratio), int(config.HEIGHT * 0.75)))
 
         image_rect = image.get_rect()
 

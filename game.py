@@ -32,6 +32,7 @@ class ArrowItem(Sprite):
     def draw(self):
         image_copy = pygame.transform.scale(self.image, (25, 25))
         self.screen.blit(image_copy, self.rect)
+from weapons import Bow, Sword
 
 class ChadTrouble:
 
@@ -54,7 +55,7 @@ class ChadTrouble:
         # AUDIO INIT
         mixer.init()
         self.song = pygame.mixer.Sound("resources/sounds/temp_song.mp3")
-        self.music_volume = 100
+        self.music_volume = 50
         self.song.set_volume(self.music_volume/100)
         self.song.play(-1)
 
@@ -63,9 +64,8 @@ class ChadTrouble:
         self.running = False
 
         # PLAYERS
-        from weapons import Bow, Sword  # need the import here or else python will throw error
-        self.player_one = Player(ControllerLayout.WASD, Sword())
-        self.player_two = Player(ControllerLayout.ARROW, Sword())
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
@@ -76,13 +76,14 @@ class ChadTrouble:
         # MAP
         self.walls = pygame.sprite.Group()
         self.grid = Grid(10, 10)
-        self.grid.create()
+        self.grid.create(self.players)
 
         # DISPLAYS
         self.displays = Displays(self)
 
     def run(self):
         """Game loop"""
+        #  MENU LOOP
         while not self.sm.game_active:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -93,6 +94,7 @@ class ChadTrouble:
             self.sm.display()
             pygame.display.flip()
 
+        # GAME LOOP
         self.running = True
         while self.running:
             self.clock.tick(config.FPS)
@@ -105,6 +107,10 @@ class ChadTrouble:
         # CHECK COLLISIONS
         self.check_arrow_wall_collisions()
         self.check_arrow_player_collisions()
+        for player in self.players:
+            if player.health <= 0:
+                print("Player died")
+                self.new_game()
 
         [player.handle_movement(self.grid) for player in self.players]  # updates player movement keys
         [arrow.update() for arrow in self.arrows]  # handle arrows
@@ -125,12 +131,12 @@ class ChadTrouble:
                     sys.exit()
                 elif event.key == pygame.K_g:
                     if self.player_one.weapon.weapon_type == "Bow":
-                        self.player_one.weapon = Sword()
+                        self.player_one.weapon = Sword(self)
                     else:
                         self.player_one.weapon = Bow(self)
                 elif event.key == pygame.K_o:
                     if self.player_two.weapon.weapon_type == "Bow":
-                        self.player_two.weapon = Sword()
+                        self.player_two.weapon = Sword(self)
                     else:
                         self.player_two.weapon = Bow(self)
 
@@ -225,6 +231,21 @@ class ChadTrouble:
         for arrow_item in self.arrow_items.copy():
             if time.time() - arrow_item.spawn_time > 15:
                 self.arrow_items.remove(arrow_item)
+    def new_game(self):
+        # PLAYER
+        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_two = Player(ControllerLayout.ARROW, Sword(self))
+        self.players.empty()
+        self.players.add(self.player_one)
+        self.players.add(self.player_two)
+
+        # ARROWS
+        self.arrows.empty()
+
+        # MAP
+        self.walls.empty()
+        self.grid = Grid(10, 10)
+        self.grid.create(self.players)
 
 if __name__ == "__main__":
     ct = ChadTrouble()

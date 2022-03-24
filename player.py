@@ -58,9 +58,6 @@ class Player(Sprite):
 
     def update(self, screen):
         # DRAW PLAYER AND WEAPON
-        if self.weapon.weapon_type == "Sword":
-            self.weapon.update_swing(self.position, self.angle, self.input_keys)
-
         rotated_image = rotate(self.image, self.angle-90)
         self.weapon.draw(screen, self.position, self.angle)
         screen.blit(rotated_image, self.position.xy)
@@ -91,6 +88,10 @@ class Player(Sprite):
 
         self.angle += (self.rotation_velocity / FPS) * (bool(keys[self.input_keys.value[1]]) - bool(keys[self.input_keys.value[3]]))
         self.rect.x, self.rect.y = self.position.xy  # updating player rect coords
+
+    def set_position(self, x, y):
+        self.position.xy = x, y
+        self.rect.x, self.rect.y = x, y
 
     def handle_action(self, event):
         if event.type == KEYDOWN:

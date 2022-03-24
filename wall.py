@@ -2,6 +2,7 @@ from pygame.sprite import Sprite, Group, spritecollide
 from player import Position, Player
 from pygame import Rect
 from pygame.draw import rect as draw_rect
+from pygame.draw import line
 from pygame import Surface
 import config
 from random import randint
@@ -28,35 +29,58 @@ class Grid:
     def __init__(self, rows: int, cols: int):
         self.rows = rows
         self.cols = cols
-        self.walls = Group()  # our grid is 1D
+        self.grid = []  # a representation of our grid
+        self.walls = Group()  # storing the walls
 
-    def create(self):
-        """Generate the maze"""
+    def randomize_spawns(self, players: Group):
+        for player in players:
+            rand_x = ((config.WIDTH / self.cols) * randint(0, self.cols - 1)) + (config.WIDTH / self.cols) / 2 - 20
+            rand_y = ((config.HEIGHT / self.rows) * randint(0, self.rows - 1)) + (config.HEIGHT / self.rows) / 2 - 20
+            player.set_position(rand_x, rand_y)
+
+    def generate_path(self, player_group: Group):  # not yet done
+        path = Group()
+        players = player_group.sprites()
+
+        dx = config.WIDTH / self.cols
+        dy = config.HEIGHT / self.rows
+
+        points = []
+        cur_point = players[0].position
+
+        bias = 0.7
+
+
+    def load_walls(self):
         wall_x = int(config.WIDTH / self.cols)
         wall_y = int(config.HEIGHT / self.rows)
 
-        # First build a box so players can't go outside of the window
-        for x in range(self.cols):
-            top_wall = Wall(Position(x*wall_x, 0), wall_x, Wall.HORIZONTAL) # Top
-            self.walls.add(top_wall)
-            bottom_wall = Wall(Position(x*wall_x, config.HEIGHT-config.WALL_WIDTH), wall_x, Wall.HORIZONTAL)
-            self.walls.add(bottom_wall)
-
-        for y in range(self.rows):
-            left_wall = Wall(Position(0, y*wall_y), wall_y, Wall.VERTICAL) # Left
-            self.walls.add(left_wall)
-            right_wall = Wall(Position(config.WIDTH, y*wall_y), wall_y, Wall.VERTICAL)
-            self.walls.add(right_wall)
+        # PLAYER BORDERS
+        top_wall = Wall(Position(0, 0), config.WIDTH, Wall.HORIZONTAL)  # Top wall
+        bottom_wall = Wall(Position(0, config.HEIGHT - config.WALL_WIDTH), config.WIDTH, Wall.HORIZONTAL)  # Bottom wall
+        left_wall = Wall(Position(0, 0), config.HEIGHT, Wall.VERTICAL)  # Left wall
+        right_wall = Wall(Position(config.WIDTH - config.WALL_WIDTH, 0), config.HEIGHT, Wall.VERTICAL)  # Right wall
+        self.walls.add(bottom_wall)
+        self.walls.add(top_wall)
+        self.walls.add(left_wall)
+        self.walls.add(right_wall)
 
         for i in range(self.rows):
             for j in range(self.cols):
-                if randint(0, 1) == 1:  # horizonal walls
-                    wall = Wall(Position(j*wall_x, i*wall_y), wall_x, Wall.HORIZONTAL)
+                if randint(0, 3) == 1:  # horizonal walls
+                    wall = Wall(Position(j * wall_x, i * wall_y), wall_x, Wall.HORIZONTAL)
                     self.walls.add(wall)
 
-                if randint(0, 1) == 1:  # vertical walls
-                    wall = Wall(Position(j*wall_x, i*wall_y), wall_y, Wall.VERTICAL)
+                if randint(0, 3) == 1:  # vertical walls
+                    wall = Wall(Position(j * wall_x, i * wall_y), wall_y, Wall.VERTICAL)
                     self.walls.add(wall)
+
+
+    def create(self, players: Group):
+        """Generate the maze"""
+        self.load_walls()
+        self.randomize_spawns(players)
+        self.generate_path(players)
 
     def draw(self, screen):
         for wall in self.walls:
