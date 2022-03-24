@@ -91,8 +91,15 @@ class Grid:
         player.rect.x, player.rect.y = player.position.xy
         dummy_square = dummySquare(player, player.rect.width * 0.6, player.rect.height * 0.6)
         collision = spritecollide(dummy_square, self.walls, False, False)
+        collisions = [False, False]
+        for wall in collision:
+            if abs(dummy_square.rect.right - wall.rect.left) <= 1 or abs(dummy_square.rect.left - wall.rect.right) <= 1:
+                collisions[0] = True
+            if abs(dummy_square.rect.top - wall.rect.bottom) <= 1 or abs(dummy_square.rect.bottom - wall.rect.top) <= 1:
+                collisions[1] = True
+
         player.rect = prev_rect
-        return collision
+        return collisions
 
 class dummySquare(Sprite):
     def __init__(self, player, length, width):

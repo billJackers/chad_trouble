@@ -79,15 +79,19 @@ class Player(Sprite):
             prev_pos = Position(self.position.x - dx, self.position.y + dy)
             self.position.x += dx
             self.position.y -= dy
-            if grid.is_collision(self):
-                self.position = prev_pos
+            if grid.is_collision(self)[0]:
+                self.position.x -= dx #prev_pos.x
+            if grid.is_collision(self)[1]:
+                self.position.y += dy #prev_pos.y
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
             prev_pos = Position(self.position.x + dx, self.position.y - dy)
             self.position.x -= dx
             self.position.y += dy
-            if grid.is_collision(self):
-                self.position = prev_pos
+            if grid.is_collision(self)[0]:
+                self.position.x += dx #prev_pos.x
+            if grid.is_collision(self)[1]:
+                self.position.y -= dy #prev_pos.y
 
         self.angle += (self.rotation_velocity / FPS) * (bool(keys[self.input_keys.value[1]]) - bool(keys[self.input_keys.value[3]]))
         self.rect.x, self.rect.y = self.position.xy  # updating player rect coords

@@ -135,7 +135,7 @@ class ChadTrouble:
                 self.running = False
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
+                if event.key == pygame.K_ESCAPE:
                     self.running = False
                     sys.exit()
                 elif event.key == pygame.K_g:
@@ -148,6 +148,8 @@ class ChadTrouble:
                         self.player_two.weapon = Sword(self)
                     else:
                         self.player_two.weapon = Bow(self)
+                elif event.key == pygame.K_m:
+                    self.new_game()
 
             [player.handle_action(event) for player in self.players]  # updates player movement keys
 
