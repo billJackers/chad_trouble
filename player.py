@@ -47,7 +47,7 @@ class Player(Sprite):
         self.health = 100
 
         # PLAYER IMAGE
-        self.image = load_image("resources/images/player/topdowngigachad.png") if layout.name == "WASD" else load_image("resources/images/rroyalguard.bmp")  # python trolling
+        self.image = load_image("resources/images/player/topdowngigachad_blue.png") if layout.name == "WASD" else load_image("resources/images/player/topdowngigachad_red.png")  # python trolling
         self.rect = self.image.get_rect()
 
         # MOVEMENT VARIABLES

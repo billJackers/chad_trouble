@@ -97,6 +97,8 @@ class ChadTrouble:
             self.sm.display()
             pygame.display.flip()
 
+        self.new_game()
+
         # GAME LOOP
         self.running = True
         while self.running:
