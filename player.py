@@ -8,6 +8,7 @@ from pygame.key import get_pressed as get_keys_pressed
 from pygame.constants import KEYDOWN, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_p, K_w, K_a, K_s, K_d, K_f
 from enum import Enum
 import math
+import time
 
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -45,6 +46,8 @@ class Player(Sprite):
         self.max_arrows = 10
 
         self.health = 100
+
+        self.prev_arrow_shoot_time = time.time()
 
         # PLAYER IMAGE
         self.image = load_image("resources/images/player/topdowngigachad_blue.png") if layout.name == "WASD" else load_image("resources/images/player/topdowngigachad_red.png")  # python trolling
@@ -97,8 +100,9 @@ class Player(Sprite):
         if event.type == KEYDOWN:
             if event.key == self.input_keys.value[4]:
                 if self.weapon.weapon_type == "Bow":
-                    if self.num_arrows == 0:
+                    if self.num_arrows == 0 or time.time() - self.prev_arrow_shoot_time <= 0.5:
                         return
                     else:
                         self.num_arrows -= 1
+                        self.prev_arrow_shoot_time = time.time()
                 self.weapon.attack(self.position, self.angle, self.input_keys)

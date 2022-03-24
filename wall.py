@@ -89,6 +89,13 @@ class Grid:
         """Detect player-wall collisions"""
         prev_rect = player.rect
         player.rect.x, player.rect.y = player.position.xy
-        collision = spritecollide(player, self.walls, False, False)
+        dummy_square = dummySquare(player, player.rect.width * 0.6, player.rect.height * 0.6)
+        collision = spritecollide(dummy_square, self.walls, False, False)
         player.rect = prev_rect
         return collision
+
+class dummySquare(Sprite):
+    def __init__(self, player, length, width):
+        super().__init__()
+        self.rect = Rect(0, 0, length, width)
+        self.rect.center = player.rect.center

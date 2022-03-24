@@ -76,7 +76,7 @@ class Arrow(Sprite):
         self.angle = initial_angle
         self.alive = True
 
-        self.damage = 20
+        self.damage = 35
 
         self.input_type = input_type
 
