@@ -155,6 +155,13 @@ class ChadTrouble:
         """Update the screen"""
         if self.sm.game_active:
             self.screen.fill(config.BG_COLOR)
+
+            # Draw lines on the ground
+            for x in range(-4, 4):
+                pygame.draw.line(self.screen, (150, 150, 150, 25), (x * config.WIDTH/4, 0), (400 + x * config.WIDTH/4, self.screen_rect.bottom))
+            for y in range(-4, 4):
+                pygame.draw.line(self.screen, (150, 150, 150, 25), (0, y * config.HEIGHT/4), (self.screen_rect.bottom, 400 + y * config.HEIGHT/4))
+
             self.grid.draw(self.screen)
             [arrow.draw(self.screen) for arrow in self.arrows]  # draws arrows
             [player.update(self.screen) for player in self.players]  # draws players on screen

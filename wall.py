@@ -50,7 +50,6 @@ class Grid:
 
         bias = 0.7
 
-
     def load_walls(self):
         wall_x = int(config.WIDTH / self.cols)
         wall_y = int(config.HEIGHT / self.rows)
