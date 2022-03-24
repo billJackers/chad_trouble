@@ -36,7 +36,7 @@ class ChadTrouble:
 
         # PLAYERS
         self.player_one = Player(ControllerLayout.WASD, Bow(self))
-        self.player_two = Player(ControllerLayout.ARROW, Sword())
+        self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
@@ -140,7 +140,7 @@ class ChadTrouble:
     def new_game(self):
         # PLAYER
         self.player_one = Player(ControllerLayout.WASD, Bow(self))
-        self.player_two = Player(ControllerLayout.ARROW, Sword())
+        self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players.empty()
         self.players.add(self.player_one)
         self.players.add(self.player_two)
