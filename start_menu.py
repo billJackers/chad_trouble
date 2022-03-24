@@ -77,9 +77,9 @@ class StartMenu:
                 self.back_button.draw_button()
 
             if self.credits_page_active:
-                self.display_page('resources/images/credits_label.png')
+                self.display_page('resources/images/start_menu_labels/credits_label.png')
             elif self.help_page_active:
-                self.display_page('resources/images/help_label.png')
+                self.display_page('resources/images/start_menu_labels/help_label.png')
             elif self.settings_page_active:
                 self.display_settings()
             elif self.start_menu_active:
@@ -106,7 +106,7 @@ class StartMenu:
         # self.screen.blit(chad_label, chad_label_rect)
         # self.screen.blit(trouble_label, trouble_label_rect)
 
-        image = pygame.image.load("resources/images/title_label.png")
+        image = pygame.image.load("resources/images/start_menu_labels/title_label.png")
 
         height_to_width_ratio = image.get_rect().height/image.get_rect().width
         image = pygame.transform.scale(image, (int(300/height_to_width_ratio), 300))
@@ -146,7 +146,7 @@ class StartMenu:
         self.screen.blit(image, image_rect)
 
     def display_settings(self):
-        self.display_page('resources/images/settings_label.png')
+        self.display_page('resources/images/start_menu_labels/settings_label.png')
         music_minus_button = Button(50, 50, "-", self.screen_rect.centerx - 100, self.screen_rect.centery-15, (137, 41, 133), self.game)
         music_plus_button = Button(50, 50, "+", self.screen_rect.centerx + 50, self.screen_rect.centery-15, (137, 41, 133), self.game)
 
