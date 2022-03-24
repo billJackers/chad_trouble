@@ -108,16 +108,9 @@ class Bow(Weapon):
     def __init__(self, game):
         super().__init__(15, load_image("resources/images/bow.png"))
         self.game = game
-        self.num_arrows = 200#int(random.uniform(2, 5))
-
         self.weapon_type = "Bow"
-
-        print(str(self.num_arrows) + " arrows")
 
     def attack(self, player_position, player_angle, input_type):
         """Fire arrow"""
-        if self.num_arrows > 0:
-            arrow = Arrow(player_position, player_angle, input_type)
-            self.game.arrows.add(arrow)
-
-        self.num_arrows -= 1
+        arrow = Arrow(player_position, player_angle, input_type)
+        self.game.arrows.add(arrow)
