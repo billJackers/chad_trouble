@@ -64,7 +64,7 @@ class ChadTrouble:
         self.running = False
 
         # PLAYERS
-        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_one = Player(ControllerLayout.WASD, Sword(self))
         self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players = pygame.sprite.Group()
         self.players.add(self.player_one)
@@ -112,6 +112,7 @@ class ChadTrouble:
         # CHECK COLLISIONS
         self.check_arrow_wall_collisions()
         self.check_arrow_player_collisions()
+        self.check_sword_player_collisions()
         for player in self.players:
             if player.health <= 0:
                 if player == self.player_one:
@@ -202,6 +203,21 @@ class ChadTrouble:
                                 player.health -= arrow.damage
                                 self.arrows.remove(arrow)
 
+    def check_sword_player_collisions(self):
+        if self.player_one.weapon.weapon_type == "Sword" and self.player_one.weapon.swinging:
+            collisions = pygame.sprite.spritecollide(self.player_one.weapon, self.players, False)
+            if collisions:
+                for player in collisions:
+                    if player == self.player_two:
+                        player.health -= self.player_one.weapon.damage
+
+        if self.player_two.weapon.weapon_type == "Sword" and self.player_two.weapon.swinging:
+            collisions = pygame.sprite.spritecollide(self.player_two.weapon, self.players, False)
+            if collisions:
+                for player in collisions:
+                    if player == self.player_one:
+                        player.health -= self.player_two.weapon.damage
+
     def display_win_screen(self, winner):
         s = "PLAYER ONE WINS!!!"
         if winner == 2:
@@ -247,7 +263,7 @@ class ChadTrouble:
                 self.arrow_items.remove(arrow_item)
     def new_game(self):
         # PLAYER
-        self.player_one = Player(ControllerLayout.WASD, Bow(self))
+        self.player_one = Player(ControllerLayout.WASD, Sword(self))
         self.player_two = Player(ControllerLayout.ARROW, Sword(self))
         self.players.empty()
         self.arrow_items.empty()

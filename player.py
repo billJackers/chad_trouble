@@ -82,7 +82,7 @@ class Player(Sprite):
             if grid.is_collision(self)[0]:
                 self.position.x -= dx #prev_pos.x
             if grid.is_collision(self)[1]:
-                self.position.y += dy #prev_pos.y
+                self.position.y = prev_pos.y
 
         if keys[self.input_keys.value[2]]:  # Handles DOWN / s
             prev_pos = Position(self.position.x + dx, self.position.y - dy)

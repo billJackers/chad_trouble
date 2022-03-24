@@ -89,19 +89,19 @@ class Grid:
         """Detect player-wall collisions"""
         prev_rect = player.rect
         player.rect.x, player.rect.y = player.position.xy
-        dummy_square = dummySquare(player, player.rect.width * 0.6, player.rect.height * 0.6)
-        collision = spritecollide(dummy_square, self.walls, False, False)
+        hit_box = HitBox(player, player.rect.width * 0.6, player.rect.height * 0.6)
+        collision = spritecollide(hit_box, self.walls, False, False)
         collisions = [False, False]
         for wall in collision:
-            if abs(dummy_square.rect.right - wall.rect.left) <= 1 or abs(dummy_square.rect.left - wall.rect.right) <= 1:
+            if abs(hit_box.rect.right - wall.rect.left) <= 1 or abs(hit_box.rect.left - wall.rect.right) <= 1:
                 collisions[0] = True
-            if abs(dummy_square.rect.top - wall.rect.bottom) <= 1 or abs(dummy_square.rect.bottom - wall.rect.top) <= 1:
+            if abs(hit_box.rect.top - wall.rect.bottom) <= 1 or abs(hit_box.rect.bottom - wall.rect.top) <= 1:
                 collisions[1] = True
 
         player.rect = prev_rect
         return collisions
 
-class dummySquare(Sprite):
+class HitBox(Sprite):
     def __init__(self, player, length, width):
         super().__init__()
         self.rect = Rect(0, 0, length, width)

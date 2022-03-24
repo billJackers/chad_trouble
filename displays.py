@@ -33,18 +33,9 @@ class Displays:
         player_one_label_rect.bottom = self.screen_rect.bottom - 40
         self.screen.blit(player_one_label, player_one_label_rect)
 
-        player_one_health_bar_width = 50 * self.game.player_one.health / 100
-        player_one_health_bar_rect = pygame.Rect(20, self.screen_rect.bottom-30, player_one_health_bar_width, 10)
+        player_one_health_bar_width = 100 * self.game.player_one.health / 100
+        player_one_health_bar_rect = pygame.Rect(20, self.screen_rect.bottom-30, player_one_health_bar_width, 20)
         pygame.draw.rect(self.screen, (0, 200, 50), player_one_health_bar_rect)
-
-        # Displays the hp
-        # player_one_health_bar_number = self.game.player_one.health
-        # new_font = pygame.font.SysFont(None, 10)
-        # self.image_1 = self.font.render(str(player_one_health_bar_number), True, self.text_color)
-        # self.image_1_rect = self.image_1.get_rect()
-        # self.image_1_rect.left = 10
-        # self.image_1_rect.bottom = self.screen_rect.bottom-30
-        # self.screen.blit(self.image_1, self.image_1_rect)
 
         # Player two
         player_two_label = self.font.render("PLAYER 2", True, self.text_color)
@@ -53,8 +44,8 @@ class Displays:
         player_two_label_rect.bottom = self.screen_rect.bottom - 40
         self.screen.blit(player_two_label, player_two_label_rect)
 
-        player_two_health_bar_width = 50 * self.game.player_two.health / 100
-        player_two_health_bar_rect = pygame.Rect(self.screen_rect.right - 60, self.screen_rect.bottom-30, player_two_health_bar_width, 10)
+        player_two_health_bar_width = 100 * self.game.player_two.health / 100
+        player_two_health_bar_rect = pygame.Rect(self.screen_rect.right - 60, self.screen_rect.bottom-30, player_two_health_bar_width, 20)
         player_two_health_bar_rect.right = self.screen_rect.right-30
         pygame.draw.rect(self.screen, (0, 200, 50), player_two_health_bar_rect)
 
@@ -76,13 +67,13 @@ class Displays:
 
         player_one_wins = new_font.render(str(self.game.player_one_wins), True, (0, 0, 0))
         player_one_wins_rect = player_one_wins.get_rect()
-        player_one_wins_rect.left = 90
-        player_one_wins_rect.bottom = self.screen_rect.bottom - 10
+        player_one_wins_rect.left = 100
+        player_one_wins_rect.bottom = self.screen_rect.bottom - 30
 
         player_two_wins = new_font.render(str(self.game.player_two_wins), True, (0, 0, 0))
         player_two_wins_rect = player_two_wins.get_rect()
-        player_two_wins_rect.right = self.screen_rect.right - 90
-        player_two_wins_rect.bottom = self.screen_rect.bottom - 10
+        player_two_wins_rect.right = self.screen_rect.right - 100
+        player_two_wins_rect.bottom = self.screen_rect.bottom - 30
 
         self.screen.blit(player_one_wins, player_one_wins_rect)
         self.screen.blit(player_two_wins, player_two_wins_rect)

@@ -42,8 +42,12 @@ class Sword(Weapon):
         super().__init__(50, self.image)
         self.weapon_type = "Sword"
         self.rect = self.image.get_rect()
+        self.swinging = False
+        self.damage = 1
 
     def attack(self, player_position, player_angle, input_type):
+        if self.swinging:
+            return
         if not self.drawable:
             return
         self.drawable = False
@@ -55,16 +59,21 @@ class Sword(Weapon):
         # do better stuff here
         hit = False
         tick = 0
-        while not hit and tick < 100:
-            time.sleep(0.01)
+        while not hit and tick < 75:
+            time.sleep(0.001)
             tick += 1
             rotated_image = rotate(self.image, player_angle - 45)
             to_radian = math.radians(player_angle)
             dx = (10 + tick/2) * math.cos(to_radian)
             dy = (10 + tick/2) * math.sin(to_radian)
             self.game.screen.blit(rotated_image, (player_position.x + dx, player_position.y - dy))
+            self.game.player_one.update(self.game.screen)
+            self.game.player_two.update(self.game.screen)
             self.rect.x, self.rect.y = (player_position.x + dx, player_position.y - dy)
+            self.swinging = True
         self.drawable = True
+        self.swinging = False
+        
 
 
 
@@ -76,7 +85,7 @@ class Arrow(Sprite):
         self.angle = initial_angle
         self.alive = True
 
-        self.damage = 35
+        self.damage = 50
 
         self.input_type = input_type
 
